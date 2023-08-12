@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DefineDeck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz@6..96&family=Montserrat:wght@300&family=MuseoModerno&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="/css/style.css" type="css/text"> -->
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Montserrat", sans-serif;
+      font-weight: 500;
+    }
+
+    body {
+      color: black;
+    }
+
+    .container {
+      width: 80vw;
+      height: min(80vh);
+      margin: auto;
+      margin-top: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    #div-for-word-input {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    #enter-word-lable {
+      text-align: center;
+      font-size: 3rem;
+      font-weight: 900 !important;
+    }
+
+    form {
+      text-align: center;
+      font-size: 2rem;
+    }
+
+    strong {
+      font-weight: 800;
+    }
+
+    #word {
+      font-size: 5rem;
+      font-weight: 900;
+      margin: 0%;
+    }
+
+    br#br-part-of-speech {
+      font-size: 5rem;
+    }
+
+    #part-of-speech {
+      font-size: 1.5rem;
+      margin: 0;
+      padding: 0;
+      text-decoration: underline;
+    }
+
+    #list-by-partOfSpeech {
+      list-style: none;
+    }
+
+    audio {
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    #license,
+    #source {
+      font-size: 0.8rem;
+    }
+
+    #license a,
+    #source a {
+      color: black;
+    }
+
+    #license:hover a,
+    #source:hover a {
+      font-style: oblique;
+    }
+
+    .footer-padding {
+      width: 100%;
+      padding-bottom: 5rem;
+      position: relative;
+    }
+
+    .footer {
+      position: fixed;
+      text-align: center;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+      height: 3rem;
+      background-color: whitesmoke;
+    }
+
+    .footer p {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: black;
+    }
+
+    .footer p a {
+      color: black;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <% function findObjectWithTextAndAudio(array) { %>
+    <% return array.find(obj=> obj.hasOwnProperty('text') && obj.hasOwnProperty('audio') && obj.text !== '' && obj.audio !== ''); %>
+    <% } %>
+    
+    <% function findObjectWithText(array) { %>
+    <% return array.find(obj=> obj.hasOwnProperty('text') && obj.text !== ''); %>
+    <% } %>
+    
+    <% function findObjectWithAudio(array) { %>
+    <% return array.find(obj=> obj.hasOwnProperty('audio') && obj.audio !== ''); %>
+    <% } %>
+
+    <% if (locals.content) { %>
+    <p id="word">
+      <%= content[0].word.toUpperCase() %>
+    </p>
+    <hr>
+    
+    <% content.forEach(contentElement=> { %>
+    <% const resultObject=findObjectWithTextAndAudio(contentElement.phonetics); %>
+    
+    <% if (resultObject==null) { %>
+    <% const resultObject=findObjectWithText(contentElement.phonetics); %>
+    <% } %>
+    
+    <% if (resultObject==null) { %>
+    <% const resultObject=findObjectWithAudio(contentElement.phonetics); %>
+    <% } %>
+    
+    <% if (resultObject !==null) { %>
+    <% try { %>
+    <p><strong>Phonetic: </strong>
+      <%= resultObject.text %>
+    </p>
+    <% } catch(error) { %>
+    <% console.log(error.message) %>
+    <% } %>
+    
+    <% try { %>
+    <audio controls>
+      <source src=<%=resultObject.audio %> type="audio/mpeg">
+    </audio>
+    <% } catch(error) { %>
+    <% console.log(error.message) %>
+    <% } %>
+    <% } %>
+    
+    <p>
+      <ul id="list-by-partOfSpeech">
+        <% contentElement.meanings.forEach(element=> { %>
+        <li>
+          <p id="part-of-speech">
+            <%= element.partOfSpeech %>
+          </p>
+          <ul id="meaning-example-list">
+            <% element.definitions.forEach(eachDefinition=> { %>
+            <li>
+              <strong>Meaning: </strong>
+              <%= eachDefinition.definition %> <br>
+              <% if (eachDefinition.example) { %>
+              <strong>Example: </strong>
+              <%= eachDefinition.example %> <br>
+              <% } %>
+              <% if (eachDefinition.synonyms.length > 0) { %>
+              <strong>Synonyms: </strong>
+              <% eachDefinition.synonyms.forEach(syno=> { %>
+              <%= syno %>,
+              <% }) %>
+              <% } %>
+              <% if (eachDefinition.antonyms.length > 0) { %>
+              <strong>Antonyms: </strong>
+              <% eachDefinition.antonyms.forEach(anto=> { %>
+              <%= anto %>,
+              <% }) %>
+              <% } %>
+            </li>
+            <br id="br-part-of-speech">
+            <% }) %>
+          </ul>
+          <% if (element.antonyms.length > 0) { %>
+          <strong>Antonyms: </strong>
+          <% element.synonyms.forEach(syno=> { %>
+          <%= syno %>,
+          <% }) %>
+          <br>
+          <% } %>
+          <% if (element.synonyms.length > 0) { %>
+          <strong>Synonyms: </strong>
+          <% element.antonyms.forEach(anto=> { %>
+          <%= anto %>,
+          <% }) %>
+          <br>
+          <% } %>
+        </li>
+        <br>
+        <% }) %>
+      </ul>
+    </p>
+    <% }) %>
+    <hr>
+    <span id="license">
+      <strong>License: </strong><a href=<%=content[0].license.url %>><%= content[0].license.name %></a>
+    </span>
+    <span id="source">
+      <strong>Source: </strong>
+      <% content[0].sourceUrls.forEach(element=> { %>
+      <a href=<%=element %>><%= element %></a>
+      <% }) %>
+    </span>
+    <% } else { %>
+    <div id="div-for-word-input">
+      <h1 id="enter-word-lable"><label for="word">Enter Word</label><img style="width: 3rem" src="images/dictionary.png" alt=""></h1>
+      <form action="/" method="post">
+        <input type="text" name="word" id="" autocomplete="off" placeholder=" eg: Hello" />
+        <input type="submit" value='Define' />
+      </form>
+    </div>
+    <% } %>
+  </div>
+
+  <% if (!locals.content) { %>
+  <div class="footer-padding">
+    <div class="footer">
+      <p>
+        Made with ❤️ by
+        <a id="link-to-portfolio" target="_blank" href="https://pawan2611.github.io/Pawan-Kumar/">@Pawan Kumar</a>
+      </p>
+    </div>
+  </div>
+  <% } %>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+
+</html>

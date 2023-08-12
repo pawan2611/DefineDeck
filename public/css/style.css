@@ -1,0 +1,69 @@
+* {
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+body {
+  color: black;
+}
+.container {
+  width: 80vw;
+  height: min(80vh);
+  margin: auto;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+#div-for-word-input {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#enter-word-lable {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 900 !important;
+}
+form {
+  text-align: center;
+  font-size: 2rem;
+}
+
+strong {
+  font-weight: 800;
+}
+#word {
+  font-size: 5rem;
+  font-weight: 900;
+  margin: 0%;
+}
+br#br-part-of-speech {
+  font-size: 5rem;
+}
+#part-of-speech {
+  font-size: 1.5rem;
+  margin: 0;
+  padding: 0;
+  text-decoration: underline;
+}
+#list-by-partOfSpeech {
+  list-style: none;
+}
+audio {
+  display: block;
+  margin-bottom: 1rem;
+}
+#license,
+#source {
+  font-size: 0.8rem;
+}
+#license a,
+#source a {
+  color: black;
+}
+#license:hover a,
+#source:hover a {
+  font-style: oblique;
+}
